@@ -44,4 +44,18 @@ public class RotateMatrix {
             shell++;
         }
     }
+
+    public void rotateClean(int[][] matrix) {
+        int length = matrix.length;
+        int numberOfShells = (length + 1) / 2;
+        for (int shell = 0; shell < numberOfShells; shell++) {
+            for (int column = 0; column < length / 2; column++) {
+                int temp = matrix[length - 1 - column][shell];
+                matrix[length - 1 - column][shell] = matrix[length - 1 - shell][length - column - 1];
+                matrix[length - 1 - shell][length - column - 1] = matrix[column][length - 1 -shell];
+                matrix[column][length - 1 - shell] = matrix[shell][column];
+                matrix[shell][column] = temp;
+            }
+        }
+    }
 }
