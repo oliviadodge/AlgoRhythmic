@@ -8,7 +8,6 @@ import java.util.HashMap;
 An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
 */
 class NumIslandsDepthFirstSearch {
-    HashMap<String, Integer> numTimesEachNodeVisited = new HashMap<>();
 
     public static void main(String[] args) {
         NumIslandsDepthFirstSearch thing = new NumIslandsDepthFirstSearch();
@@ -35,17 +34,12 @@ class NumIslandsDepthFirstSearch {
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
 
-                String node = row + " " + column;
-                int numTimesVisited = numTimesEachNodeVisited.getOrDefault(node, 0) + 1;
-                numTimesEachNodeVisited.put(node, numTimesVisited);
-
                 if (grid[row][column] == '1') {
                     numberOfIslands++;
                     depthFirstSearch(grid, row, column);
                 }
             }
         }
-        System.out.println(numTimesEachNodeVisited);
         return numberOfIslands;
     }
 
@@ -58,10 +52,6 @@ class NumIslandsDepthFirstSearch {
         }
 
         grid[row][column] = '0';
-
-        String node = row + " " + column;
-        int numTimesVisited = numTimesEachNodeVisited.getOrDefault(node, 0) + 1;
-        numTimesEachNodeVisited.put(node, numTimesVisited);
 
         depthFirstSearch(grid, row - 1, column);
         depthFirstSearch(grid, row + 1, column);
