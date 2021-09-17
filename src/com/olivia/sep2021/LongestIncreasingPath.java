@@ -11,40 +11,43 @@ class LongestIncreasingPath {
                 {2, 1, 1}
         };
 
-        System.out.println("answer: " + thing.longestIncreasingPath(grid));
+        int[][] grid2 = new int[][]{
+                {7, 7, 5},
+                {2, 4, 6},
+                {8, 2, 0}
+        };
+
+        int[][] grid3 = new int[][]{
+                {7, 8, 9},
+                {9, 7, 6},
+                {7, 2, 3}
+        };
+
+        System.out.println("answer: " + thing.longestIncreasingPath(grid3));
     }
+
+    private static final int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    private int m, n;
 
     public int longestIncreasingPath(int[][] matrix) {
-
-        int longestIncreasingPath = 0;
-
-        for (int row = 0; row < matrix.length; row++) {
-            for (int column = 0; column < matrix[0].length; column++) {
-                longestIncreasingPath = findLongestIncreasingPathForCell(row, column, 0, matrix, longestIncreasingPath);
-            }
-        }
-        return longestIncreasingPath;
+        if (matrix.length == 0) return 0;
+        m = matrix.length;
+        n = matrix[0].length;
+        int[][] cache = new int[m][n];
+        int maxPath = 0;
+        for (int i = 0; i < m; ++i)
+            for (int j = 0; j < n; ++j)
+                maxPath = Math.max(maxPath, depthFirstSearch(matrix, cache, i, j));
+        return maxPath;
     }
 
-    private int findLongestIncreasingPathForCell(int row, int column, int prevCellVal, int[][] matrix, int maxPathSoFar) {
-
-        if (row < 0 || row >= matrix.length || column < 0 || column >= matrix[0].length) {
-            return 0;
-        } else if (matrix[row][column] <= prevCellVal) {
-            return 0;
-        } else {
-            return Math.max(maxPathSoFar,
-                    Math.max(
-                            Math.max(
-                                    1 + findLongestIncreasingPathForCell(row - 1, column, matrix[row][column], matrix, maxPathSoFar),
-                                    1 + findLongestIncreasingPathForCell(row + 1, column, matrix[row][column], matrix, maxPathSoFar)
-                            ),
-                            Math.max(
-                                    1 + findLongestIncreasingPathForCell(row, column - 1, matrix[row][column], matrix, maxPathSoFar),
-                                    1 + findLongestIncreasingPathForCell(row, column + 1, matrix[row][column], matrix, maxPathSoFar)
-                            )
-                    )
-            );
+    private int depthFirstSearch(int[][] matrix, int[][] cache, int i, int j) {
+        if (cache[i][j] != 0) return cache[i][j];
+        for (int[] direction : directions) {
+            int x = i + direction[0], y = j + direction[1];
+            if (0 <= x && x < m && 0 <= y && y < n && matrix[x][y] > matrix[i][j])
+                cache[i][j] = Math.max(cache[i][j], depthFirstSearch(matrix, cache, x, y));
         }
+        return ++cache[i][j];
     }
 }
