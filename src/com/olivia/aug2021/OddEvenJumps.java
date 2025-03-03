@@ -3,6 +3,8 @@ package com.olivia.aug2021;
 import com.olivia.LinkedListNode;
 import org.w3c.dom.Node;
 
+import java.util.Arrays;
+
 public class OddEvenJumps {
 
     public static void main(String[] args) {
@@ -10,7 +12,6 @@ public class OddEvenJumps {
         int[] arr = {10,13,12,14,15};
         int[] arr2 = {2,3,1,1,4};
         int[] arr3 = {5,1,3,4,2};
-
         System.out.println("output: " + frog.oddEvenJumps(arr));
         System.out.println("output: " + frog.oddEvenJumps(arr2));
         System.out.println("output: " + frog.oddEvenJumps(arr3));

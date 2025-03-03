@@ -1,29 +1,38 @@
 package com.olivia.sep2021;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class CourseSchedule {
+
+    public static void main(String[] args) {
+        CourseSchedule thing = new CourseSchedule();
+        int[][] arr = {{1,0}};
+        int[][] arr2 = {{1,0},{2,0},{3,1},{3,2}};
+        int[] order = thing.findOrder(2, arr);
+        int[] order2 = thing.findOrder(4, arr2);
+
+        System.out.println("output: " + Arrays.toString(order));
+        System.out.println("output: " + Arrays.toString(order2));
+    }
+
     static int WHITE = 1;
     static int GRAY = 2;
     static int BLACK = 3;
 
     boolean isPossible;
-    Map<Integer, Integer> color;
+    Map<Integer, Integer> colors;
     Map<Integer, List<Integer>> adjList;
     List<Integer> topologicalOrder;
 
     private void init(int numCourses) {
         this.isPossible = true;
-        this.color = new HashMap<>();
+        this.colors = new HashMap<>();
         this.adjList = new HashMap<>();
         this.topologicalOrder = new ArrayList<>();
 
         // By default all vertces are WHITE
         for (int i = 0; i < numCourses; i++) {
-            this.color.put(i, WHITE);
+            this.colors.put(i, WHITE);
         }
     }
 
@@ -35,20 +44,20 @@ class CourseSchedule {
         }
 
         // Start the recursion
-        this.color.put(node, GRAY);
+        this.colors.put(node, GRAY);
 
         // Traverse on neighboring vertices
-        for (Integer neighbor : this.adjList.getOrDefault(node, new ArrayList<Integer>())) {
-            if (this.color.get(neighbor) == WHITE) {
+        for (Integer neighbor : this.adjList.getOrDefault(node, new ArrayList<>())) {
+            if (this.colors.get(neighbor) == WHITE) {
                 this.dfs(neighbor);
-            } else if (this.color.get(neighbor) == GRAY) {
+            } else if (this.colors.get(neighbor) == GRAY) {
                 // An edge to a GRAY vertex represents a cycle
                 this.isPossible = false;
             }
         }
 
         // Recursion ends. We mark it as black
-        this.color.put(node, BLACK);
+        this.colors.put(node, BLACK);
         this.topologicalOrder.add(node);
     }
 
@@ -60,14 +69,14 @@ class CourseSchedule {
         for (int[] prerequisite : prerequisites) {
             int dest = prerequisite[0];
             int src = prerequisite[1];
-            List<Integer> lst = adjList.getOrDefault(src, new ArrayList<Integer>());
+            List<Integer> lst = adjList.getOrDefault(src, new ArrayList<>());
             lst.add(dest);
             adjList.put(src, lst);
         }
 
         // If the node is unprocessed, then call dfs on it.
         for (int i = 0; i < numCourses; i++) {
-            if (this.color.get(i) == WHITE) {
+            if (this.colors.get(i) == WHITE) {
                 this.dfs(i);
             }
         }
